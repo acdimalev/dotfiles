@@ -1,0 +1,5 @@
+[user]
+	name = Jamin
+	email = jamin@bitlag.net
+[push]
+	default = simple
