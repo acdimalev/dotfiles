@@ -1,0 +1,3 @@
+# My mail please
+set spoolfile="imaps://jamin-mail@madness.bitlag.net/"
+set folder="imaps://jamin-mail@madness.bitlag.net/"
