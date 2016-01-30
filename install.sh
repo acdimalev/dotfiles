@@ -5,7 +5,5 @@ for dotfile in .*; do
   if [ x"$dotfile" = x"." ]; then continue; fi 
   if [ x"$dotfile" = x".." ]; then continue; fi 
 
-  echo "$dotfile"
-
-  ln -nfs "$dotfiles"/"$dotfile" ~/
+  ln -vfs "$dotfiles"/"$dotfile" ~/
 done
