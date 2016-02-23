@@ -4,18 +4,13 @@ import Control.Monad (when)
 import Control.Monad.Loops (andM)
 import qualified Text.ParserCombinators.Parsec as Parsec
 
+
+-- path expansion
+
 data Context = Context
   { homeDirectory :: String
   , currentDirectory :: String
   }
-
-data Link = Link
-  { fromPath :: String
-  , toPath :: String
-  }
-
-instance Show Link where
-  show link = (fromPath link) ++ " -> " ++ (toPath link)
 
 expandHome :: FilePath -> FilePath -> FilePath
 expandHome home ('~':'/':xs) = home ++ '/':xs
@@ -27,6 +22,17 @@ expandCurrent current path = current ++ '/':path
 
 expandPath :: Context -> FilePath -> FilePath
 expandPath context path = expandCurrent (currentDirectory context) $ expandHome (homeDirectory context) $ path
+
+
+-- link management
+
+data Link = Link
+  { fromPath :: String
+  , toPath :: String
+  }
+
+instance Show Link where
+  show link = (fromPath link) ++ " -> " ++ (toPath link)
 
 testLink :: (FilePath -> FilePath) -> Link -> IO Bool
 testLink qualify link = andM
@@ -42,6 +48,9 @@ ensureLink qualify link = do
   x <- testLink qualify link
   when (not x) $ createSymbolicLink (qualified toPath) (qualified fromPath)
   where qualified path = qualify $ path link
+
+
+-- config file parsing
 
 pathParser :: Parsec.Parser String
 pathParser = Parsec.many (Parsec.alphaNum Parsec.<|> (Parsec.oneOf ['/','~','.'])) >>= return
@@ -63,8 +72,12 @@ linksParser = do
   return links
   Parsec.<?> "links"
 
+
+-- utility functions
+
 unwrap :: (Show a) => Either a b -> IO b
 unwrap = either (error . show) (return . id)
+
 
 -- main program body
 
