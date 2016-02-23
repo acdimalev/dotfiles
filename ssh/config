@@ -1,5 +1,3 @@
-StrictHostKeyChecking no
-
 Host madness
   HostName madness.bitlag.net
   User jamin
