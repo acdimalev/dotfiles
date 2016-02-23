@@ -1,4 +1,6 @@
-.PHONY: install clean
+.PHONY: all install clean
+
+all: src/install
 
 install: src/install
 	src/install
